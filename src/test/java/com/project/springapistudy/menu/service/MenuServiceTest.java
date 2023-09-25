@@ -1,21 +1,26 @@
 package com.project.springapistudy.menu.service;
 
 import com.project.springapistudy.menu.domain.MenuType;
+import com.project.springapistudy.menu.domain.NotFoundException;
+import com.project.springapistudy.menu.dto.MenuResponse;
 import com.project.springapistudy.menu.dto.MenuSaveRequest;
 import com.project.springapistudy.menu.entity.Menu;
 import com.project.springapistudy.menu.repository.MenuRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import java.util.Optional;
+
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class MenuServiceTest {
@@ -43,8 +48,49 @@ class MenuServiceTest {
             given(menuRepository.save(any(Menu.class))).willReturn(expectedMenu);
 
             //when & then
-            //TODO: 조회 기능 만들어지면 결과 검증으로 수정 필요
             assertDoesNotThrow(() -> menuService.registerMenu(request));
+        }
+    }
+
+    @Nested
+    @DisplayName("메뉴 단건 조회")
+    class findMenu {
+        @Test
+        @DisplayName("올바른 menuId로 조회시 성공")
+        void success() {
+            //given
+            final Long menuId = 1L;
+
+            final Menu expetcedMenu = Menu.builder()
+                    .menuId(menuId)
+                    .name("name")
+                    .type(MenuType.BEVERAGE)
+                    .useYn("Y")
+                    .build();
+
+            given(menuRepository.findById(menuId)).willReturn(Optional.of(expetcedMenu));
+
+            //when
+            MenuResponse response = menuService.findMenu(menuId);
+
+            //then
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(response.getMenuId()).isEqualTo(menuId);
+                softAssertions.assertThat(response.getName()).isEqualTo(expetcedMenu.getName());
+                softAssertions.assertThat(response.getType()).isEqualTo(expetcedMenu.getType());
+            });
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 menuId로 조회시 오류 출력")
+        void notFound() {
+            //given
+            final Long menuId = -1L;
+
+            given(menuRepository.findById(menuId)).willReturn(Optional.empty());
+
+            //when & then
+            assertThrows(NotFoundException.class, () -> menuService.findMenu(menuId));
         }
     }
 }

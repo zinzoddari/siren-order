@@ -1,6 +1,9 @@
 package com.project.springapistudy.menu.service;
 
+import com.project.springapistudy.menu.domain.NotFoundException;
+import com.project.springapistudy.menu.dto.MenuResponse;
 import com.project.springapistudy.menu.dto.MenuSaveRequest;
+import com.project.springapistudy.menu.entity.Menu;
 import com.project.springapistudy.menu.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MenuService {
     private final MenuRepository menuRepository;
+
+    @Transactional(readOnly = true)
+    public MenuResponse findMenu(long menuId) {
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(NotFoundException::new);
+
+        return MenuResponse.fromEntity(menu);
+    }
 
     @Transactional
     public Long registerMenu(MenuSaveRequest request) {
