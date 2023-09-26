@@ -246,6 +246,59 @@ class MenuControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("메뉴 삭제 요청")
+    class removeMenu {
+        @Test
+        @DisplayName("메뉴 삭제에 성공")
+        void success() throws Exception {
+            //given
+            final String selectUrl = 메뉴_저장_성공(MenuSaveRequest.builder()
+                    .name("바나나")
+                    .type(MenuType.BEVERAGE)
+                    .build());
+
+            final MenuResponse menu = 응답값을_객체에_매핑함(메뉴를_조회함(selectUrl), MenuResponse.class);
+
+            final Long menuId = menu.getMenuId();
+
+            //when
+            mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/{menuId}", menuId)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isOk());
+
+            final MenuResponse result = 응답값을_객체에_매핑함(메뉴를_조회함(selectUrl), MenuResponse.class);
+
+            //then
+            assertThat(result.getUseYn()).isEqualTo("N");
+        }
+
+        @Test
+        @DisplayName("없는 메뉴ID(menuId) 요청시 실패")
+        void notFoundMenuId() throws Exception {
+            //given
+            final String invalidMenuId = "999999999";
+
+            //when & then
+            mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/{menuId}", invalidMenuId)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isNotFound());
+        }
+
+        @Test
+        @DisplayName("1미만의 유효하지 않은 메뉴ID(menuId) 입력시 유효성 검증 실패로 오류")
+        void invalidMenuId() throws Exception {
+            //given
+            final String invalidMenuId = "0";
+
+            //when & then
+            mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/{menuId}", invalidMenuId)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        }
+    }
+
+
     private String 메뉴_저장_성공(MenuSaveRequest input) throws Exception {
         String request = "{\n" +
                 "    \"type\": \"" + input.getType() + "\",\n" +
@@ -263,15 +316,12 @@ class MenuControllerTest {
         return mvcResult.getResponse().getRedirectedUrl();
     }
 
+
     private MvcResult 메뉴를_조회함(String url) throws Exception {
         return mockMvc.perform(MockMvcRequestBuilders.get(url)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
-    }
-
-    private MvcResult 메뉴를_조회함(Long menuId) throws Exception {
-        return 메뉴를_조회함(String.format(baseUrl + "/%s", menuId));
     }
 
     private <T> T 응답값을_객체에_매핑함(MvcResult mvcResult, Class<T> type) throws Exception {

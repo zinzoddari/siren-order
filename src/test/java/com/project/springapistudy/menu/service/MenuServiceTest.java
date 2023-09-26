@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -137,6 +138,44 @@ class MenuServiceTest {
 
             //when & then
             assertThrows(NotFoundException.class, () -> menuService.modifyMenu(menuId, request));
+        }
+    }
+
+    @Nested
+    @DisplayName("메뉴 단건 삭제")
+    class removeMenu {
+        @Test
+        @DisplayName("메뉴 단건 삭제 성공")
+        void success() {
+            //given
+            final Long menuId = 1L;
+
+            final Menu expetcedMenu = Menu.builder()
+                    .menuId(menuId)
+                    .name("name")
+                    .type(MenuType.BEVERAGE)
+                    .useYn("Y")
+                    .build();
+
+            given(menuRepository.findById(menuId)).willReturn(Optional.ofNullable(expetcedMenu));
+
+            //when
+            menuService.removeMenu(menuId);
+
+            //then
+            assertThat(expetcedMenu.getUseYn()).isEqualTo("N");
+        }
+
+        @Test
+        @DisplayName("없는 메뉴 단건 삭제시 실패")
+        void notFound() {
+            //given
+            final Long menuId = -1L;
+
+            given(menuRepository.findById(menuId)).willThrow(NotFoundException.class);
+
+            //when & then
+            assertThrows(NotFoundException.class, () -> menuService.removeMenu(menuId));
         }
     }
 }

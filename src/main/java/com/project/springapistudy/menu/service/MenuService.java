@@ -17,6 +17,7 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     public MenuResponse findMenu(long menuId) {
+        //TODO: useYn이 N이면 조회가 되지 않는 요건이 필요할 것 같음
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NotFoundException::new);
 
@@ -35,5 +36,13 @@ public class MenuService {
 
         menu.changeName(request.getName());
         menu.changeType(request.getType());
+    }
+
+    @Transactional
+    public void removeMenu(long menuId) {
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(NotFoundException::new);
+
+        menu.remove();
     }
 }

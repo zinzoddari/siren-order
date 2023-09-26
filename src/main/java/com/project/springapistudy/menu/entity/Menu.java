@@ -47,4 +47,8 @@ public class Menu extends BaseEntity {
             this.type = menuType;
         }
     }
+
+    public void remove() {
+        this.useYn = "N";
+    }
 }

@@ -41,4 +41,9 @@ public class MenuController {
     public void modifyMenu(@PathVariable @Min(1) long menuId, @RequestBody @Valid MenuUpdateRequest request) {
         menuService.modifyMenu(menuId, request);
     }
+
+    @DeleteMapping("/{menuId}")
+    public void removeMenu(@PathVariable @Min(1) long menuId) {
+        menuService.removeMenu(menuId);
+    }
 }
