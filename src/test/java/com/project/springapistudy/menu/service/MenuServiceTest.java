@@ -4,6 +4,7 @@ import com.project.springapistudy.menu.domain.MenuType;
 import com.project.springapistudy.menu.domain.NotFoundException;
 import com.project.springapistudy.menu.dto.MenuResponse;
 import com.project.springapistudy.menu.dto.MenuSaveRequest;
+import com.project.springapistudy.menu.dto.MenuUpdateRequest;
 import com.project.springapistudy.menu.entity.Menu;
 import com.project.springapistudy.menu.repository.MenuRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -91,6 +92,51 @@ class MenuServiceTest {
 
             //when & then
             assertThrows(NotFoundException.class, () -> menuService.findMenu(menuId));
+        }
+    }
+
+    @Nested
+    @DisplayName("메뉴 수정")
+    class modifyMenu {
+        @Test
+        @DisplayName("메뉴 수정 성공")
+        void success() {
+            //given
+            final Long menuId = 1L;
+
+            final Menu expetcedMenu = Menu.builder()
+                    .menuId(menuId)
+                    .name("name")
+                    .type(MenuType.BEVERAGE)
+                    .useYn("Y")
+                    .build();
+
+            final MenuUpdateRequest request = MenuUpdateRequest.builder()
+                    .name("댕장꿍")
+                    .type(MenuType.DESSERT)
+                    .build();
+
+            given(menuRepository.findById(menuId)).willReturn(Optional.ofNullable(expetcedMenu));
+
+            //when & then
+            assertDoesNotThrow(() -> menuService.modifyMenu(menuId, request));
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 menuId 수정 시도 시 오류")
+        void invalidMenu() {
+            //given
+            final Long menuId = -1L;
+
+            final MenuUpdateRequest request = MenuUpdateRequest.builder()
+                    .name("댕장꿍")
+                    .type(MenuType.DESSERT)
+                    .build();
+
+            given(menuRepository.findById(menuId)).willThrow(NotFoundException.class);
+
+            //when & then
+            assertThrows(NotFoundException.class, () -> menuService.modifyMenu(menuId, request));
         }
     }
 }

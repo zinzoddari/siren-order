@@ -4,6 +4,7 @@ import com.project.springapistudy.common.jpa.BaseEntity;
 import com.project.springapistudy.menu.domain.MenuType;
 import lombok.*;
 import org.hibernate.annotations.Comment;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -34,4 +35,16 @@ public class Menu extends BaseEntity {
     @Comment("사용여부")
     @Column(name = "USE_YN")
     private String useYn;
+
+    public void changeName(String name) {
+        if (!ObjectUtils.isEmpty(name)) {
+            this.name = name;
+        }
+    }
+
+    public void changeType(MenuType menuType) {
+        if (!ObjectUtils.isEmpty(menuType)) {
+            this.type = menuType;
+        }
+    }
 }

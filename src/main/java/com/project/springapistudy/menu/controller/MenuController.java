@@ -2,6 +2,7 @@ package com.project.springapistudy.menu.controller;
 
 import com.project.springapistudy.menu.dto.MenuResponse;
 import com.project.springapistudy.menu.dto.MenuSaveRequest;
+import com.project.springapistudy.menu.dto.MenuUpdateRequest;
 import com.project.springapistudy.menu.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,10 @@ public class MenuController {
                         .buildAndExpand(response)
                         .toUri())
                 .build();
+    }
+
+    @PutMapping("/{menuId}")
+    public void modifyMenu(@PathVariable @Min(1) long menuId, @RequestBody @Valid MenuUpdateRequest request) {
+        menuService.modifyMenu(menuId, request);
     }
 }

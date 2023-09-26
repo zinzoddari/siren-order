@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.springapistudy.menu.domain.MenuType;
 import com.project.springapistudy.menu.dto.MenuResponse;
 import com.project.springapistudy.menu.dto.MenuSaveRequest;
+import com.project.springapistudy.menu.dto.MenuUpdateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -142,6 +143,106 @@ class MenuControllerTest {
             mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "/{menuId}", menuId)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(MockMvcResultMatchers.status().isNotFound());
+        }
+    }
+
+    @Nested
+    @DisplayName("메뉴 수정 요청")
+    class modifyMenu {
+        @Test
+        @DisplayName("메뉴 수정 성공")
+        void success() throws Exception {
+            //given
+            final String selectUrl = 메뉴_저장_성공(MenuSaveRequest.builder()
+                    .name("바나나")
+                    .type(MenuType.BEVERAGE)
+                    .build());
+
+            final MenuResponse menu = 응답값을_객체에_매핑함(메뉴를_조회함(selectUrl), MenuResponse.class);
+
+            final MenuUpdateRequest request = MenuUpdateRequest.builder()
+                    .name("오렌지")
+                    .type(MenuType.DESSERT)
+                    .build();
+
+            final String reqeustString = "{\n" +
+                    "    \"type\": \"" + request.getType() + "\",\n" +
+                    "    \"name\": \"" + request.getName() + "\"\n" +
+                    "}";
+
+            //when
+            mockMvc.perform(MockMvcRequestBuilders.put(baseUrl + "/{menuId}", menu.getMenuId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(reqeustString))
+                    .andExpect(MockMvcResultMatchers.status().isOk());
+
+            final MenuResponse response = 응답값을_객체에_매핑함(메뉴를_조회함(selectUrl), MenuResponse.class);
+
+            //then
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(response.getType()).isNotEqualTo(menu.getType());
+                softAssertions.assertThat(response.getName()).isNotEqualTo(menu.getName());
+            });
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 menuId 수정 요청시 오류")
+        void nofFoundMenuId() throws Exception {
+            //given
+            final String menuId = "99999999";
+            final String reqeustString = "{\n" +
+                    "    \"type\": \"" + MenuType.DESSERT + "\",\n" +
+                    "    \"name\": \"" + "아이스크림" + "\"\n" +
+                    "}";
+
+            //when & then
+            mockMvc.perform(MockMvcRequestBuilders.put(baseUrl + "/{menuId}", menuId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(reqeustString))
+                    .andExpect(MockMvcResultMatchers.status().isNotFound());
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 메뉴 종류(menuType) 입력하여 수정 요청시 오류")
+        void invalidMenuType() throws Exception {
+            //given
+            final String invalidMenuType = "AAA";
+
+            final String selectUrl = 메뉴_저장_성공(MenuSaveRequest.builder()
+                    .name("바나나")
+                    .type(MenuType.BEVERAGE)
+                    .build());
+
+            final MenuResponse menu = 응답값을_객체에_매핑함(메뉴를_조회함(selectUrl), MenuResponse.class);
+
+            final String reqeustString = "{\n" +
+                    "    \"type\": \"" + invalidMenuType + "\",\n" +
+                    "    \"name\": \"" + "아이스크림" + "\"\n" +
+                    "}";
+
+            //when & then
+            mockMvc.perform(MockMvcRequestBuilders.put(baseUrl + "/{menuId}", menu.getMenuId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(reqeustString))
+                    .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        }
+
+        @Test
+        @DisplayName("1미만의 유효하지 않은 메뉴ID(menuId) 입력시 유효성 검증 실패로 오류")
+        void invalidMenuId() throws Exception {
+            //given
+            final String invalidMenuId = "0";
+
+            final String reqeustString = "{\n" +
+                    "    \"type\": \"" + MenuType.DESSERT + "\",\n" +
+                    "    \"name\": \"" + "아이스크림" + "\"\n" +
+                    "}";
+
+            //when & then
+            mockMvc.perform(MockMvcRequestBuilders.put(baseUrl + "/{menuId}", invalidMenuId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(reqeustString))
+                    .andExpect(MockMvcResultMatchers.status().isBadRequest());
         }
     }
 
