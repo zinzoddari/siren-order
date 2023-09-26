@@ -1,7 +1,6 @@
 package com.project.springapistudy.menu.dto;
 
 import com.project.springapistudy.menu.domain.MenuType;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,14 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 class MenuSaveRequestTest {
-    private static ValidatorFactory validatorFactory;
-    private static Validator validator;
-
-    @BeforeAll
-    public static void init() {
-        validatorFactory = Validation.buildDefaultValidatorFactory();
-        validator = validatorFactory.getValidator();
-    }
+    private static final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+    private static final Validator validator = validatorFactory.getValidator();
 
     @Nested
     @DisplayName("메뉴 종류 유효성 검증")
