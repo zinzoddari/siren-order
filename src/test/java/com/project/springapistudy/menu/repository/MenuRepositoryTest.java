@@ -35,11 +35,7 @@ class MenuRepositoryTest {
         @DisplayName("메뉴명이 null 혹은 32자가 넘었을 경우 등록 실패")
         void invalidName(String name) {
             //given
-            Menu menu = Menu.builder()
-                    .type(MenuType.BEVERAGE)
-                    .name(name)
-                    .useYn("Y")
-                    .build();
+            Menu menu = Menu.createMenu(MenuType.BEVERAGE, name, "Y");
 
             //when
             menuRepository.save(menu);
@@ -57,11 +53,7 @@ class MenuRepositoryTest {
         final String name = "아메리카노";
         final String useYn = "Y";
 
-        Menu menu = Menu.builder()
-                .type(menuType)
-                .name(name)
-                .useYn(useYn)
-                .build();
+        Menu menu = Menu.createMenu(menuType, name, useYn);
 
         //when
         Menu result = menuRepository.save(menu);

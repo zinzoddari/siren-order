@@ -30,11 +30,7 @@ class MenuSaveRequestTest {
         @DisplayName("존재하지 않는 메뉴 종류 입력시 유효성 검증 실패")
         void invalidMenuType(String menuType) {
             //when
-            MenuSaveRequest request = MenuSaveRequest.builder()
-                    .type(MenuType.from(menuType))
-                    .name("name")
-                    .useYn("Y")
-                    .build();
+            MenuSaveRequest request = MenuSaveRequest.create(MenuType.from(menuType), "name", "Y");
 
             Set<ConstraintViolation<MenuSaveRequest>> violations = validator.validate(request);
             ConstraintViolation<MenuSaveRequest> result = violations.iterator().next();
@@ -55,11 +51,7 @@ class MenuSaveRequestTest {
         @DisplayName("name이 빈값 혹은 null 값으로 입력시 유효성 검증 실패")
         void nameIsNull(String name) {
             //when
-            MenuSaveRequest request = MenuSaveRequest.builder()
-                    .type(MenuType.BEVERAGE)
-                    .name(name)
-                    .useYn("Y")
-                    .build();
+            MenuSaveRequest request = MenuSaveRequest.create(MenuType.BEVERAGE, name, "Y");
 
             Set<ConstraintViolation<MenuSaveRequest>> violations = validator.validate(request);
             ConstraintViolation<MenuSaveRequest> result = violations.iterator().next();
@@ -78,11 +70,7 @@ class MenuSaveRequestTest {
             final String name = "가나다라마바사아자차카파타하가나다라마바사아자차카파타하가나다라마바사아자차카파타하";
 
             //when
-            MenuSaveRequest request = MenuSaveRequest.builder()
-                    .type(MenuType.BEVERAGE)
-                    .name(name)
-                    .useYn("Y")
-                    .build();
+            MenuSaveRequest request = MenuSaveRequest.create(MenuType.BEVERAGE, name, "Y");
 
             Set<ConstraintViolation<MenuSaveRequest>> violations = validator.validate(request);
             ConstraintViolation<MenuSaveRequest> result = violations.iterator().next();
@@ -103,11 +91,7 @@ class MenuSaveRequestTest {
         @DisplayName("사용여부가 null 혹은 빈 값이면 유효성 검증 실패")
         void useYnIsNotNull(String useYn) {
             //when
-            MenuSaveRequest request = MenuSaveRequest.builder()
-                    .type(MenuType.BEVERAGE)
-                    .name("name")
-                    .useYn(useYn)
-                    .build();
+            MenuSaveRequest request = MenuSaveRequest.create(MenuType.BEVERAGE, "name", useYn);
 
             Set<ConstraintViolation<MenuSaveRequest>> violations = validator.validate(request);
             ConstraintViolation<MenuSaveRequest> result = violations.iterator().next();
@@ -129,11 +113,7 @@ class MenuSaveRequestTest {
         final String useYn = "Y";
 
         //when
-        MenuSaveRequest request = MenuSaveRequest.builder()
-                .type(menuType)
-                .name(name)
-                .useYn(useYn)
-                .build();
+        MenuSaveRequest request = MenuSaveRequest.create(menuType, name, useYn);
 
         Set<ConstraintViolation<MenuSaveRequest>> violations = validator.validate(request);
 
