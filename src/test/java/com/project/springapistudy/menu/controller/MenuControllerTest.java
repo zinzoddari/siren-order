@@ -99,10 +99,7 @@ class MenuControllerTest {
         @DisplayName("메뉴 단건 조회 성공")
         void success() throws Exception {
             //given
-            final MenuSaveRequest request = MenuSaveRequest.builder()
-                    .name("바나나")
-                    .type(MenuType.BEVERAGE)
-                    .build();
+            final MenuSaveRequest request = MenuSaveRequest.create(MenuType.BEVERAGE, "바나나", "Y");
             final String selectUrl = 메뉴_저장_성공(request);
 
             //when
@@ -153,17 +150,12 @@ class MenuControllerTest {
         @DisplayName("메뉴 수정 성공")
         void success() throws Exception {
             //given
-            final String selectUrl = 메뉴_저장_성공(MenuSaveRequest.builder()
-                    .name("바나나")
-                    .type(MenuType.BEVERAGE)
-                    .build());
+            final MenuSaveRequest saveMenu = MenuSaveRequest.create(MenuType.BEVERAGE, "바나나", "Y");
+            final String selectUrl = 메뉴_저장_성공(saveMenu);
 
             final MenuResponse menu = 응답값을_객체에_매핑함(메뉴를_조회함(selectUrl), MenuResponse.class);
 
-            final MenuUpdateRequest request = MenuUpdateRequest.builder()
-                    .name("오렌지")
-                    .type(MenuType.DESSERT)
-                    .build();
+            final MenuUpdateRequest request = MenuUpdateRequest.create(MenuType.DESSERT, "오렌지");
 
             final String reqeustString = "{\n" +
                     "    \"type\": \"" + request.getType() + "\",\n" +
@@ -207,11 +199,9 @@ class MenuControllerTest {
         void invalidMenuType() throws Exception {
             //given
             final String invalidMenuType = "AAA";
+            final MenuSaveRequest saveMenu = MenuSaveRequest.create(MenuType.BEVERAGE, "바나나", "Y");
 
-            final String selectUrl = 메뉴_저장_성공(MenuSaveRequest.builder()
-                    .name("바나나")
-                    .type(MenuType.BEVERAGE)
-                    .build());
+            final String selectUrl = 메뉴_저장_성공(saveMenu);
 
             final MenuResponse menu = 응답값을_객체에_매핑함(메뉴를_조회함(selectUrl), MenuResponse.class);
 
@@ -253,10 +243,8 @@ class MenuControllerTest {
         @DisplayName("메뉴 삭제에 성공")
         void success() throws Exception {
             //given
-            final String selectUrl = 메뉴_저장_성공(MenuSaveRequest.builder()
-                    .name("바나나")
-                    .type(MenuType.BEVERAGE)
-                    .build());
+            final MenuSaveRequest saveMenu = MenuSaveRequest.create(MenuType.BEVERAGE, "바나나", "Y");
+            final String selectUrl = 메뉴_저장_성공(saveMenu);
 
             final MenuResponse menu = 응답값을_객체에_매핑함(메뉴를_조회함(selectUrl), MenuResponse.class);
 
@@ -298,7 +286,6 @@ class MenuControllerTest {
         }
     }
 
-
     private String 메뉴_저장_성공(MenuSaveRequest input) throws Exception {
         String request = "{\n" +
                 "    \"type\": \"" + input.getType() + "\",\n" +
@@ -315,7 +302,6 @@ class MenuControllerTest {
 
         return mvcResult.getResponse().getRedirectedUrl();
     }
-
 
     private MvcResult 메뉴를_조회함(String url) throws Exception {
         return mockMvc.perform(MockMvcRequestBuilders.get(url)

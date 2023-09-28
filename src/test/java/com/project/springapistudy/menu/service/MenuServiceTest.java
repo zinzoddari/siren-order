@@ -39,11 +39,7 @@ class MenuServiceTest {
         @DisplayName("메뉴 등록 성공")
         void success() {
             //given
-            MenuSaveRequest request = MenuSaveRequest.builder()
-                    .type(MenuType.BEVERAGE)
-                    .name("얼음 뺀 아이스 아메리카노")
-                    .useYn("Y")
-                    .build();
+            MenuSaveRequest request = MenuSaveRequest.create(MenuType.BEVERAGE, "얼음 뺀 아이스 아메리카노", "Y");
 
             Menu expectedMenu = request.toEntity();
 
@@ -63,12 +59,7 @@ class MenuServiceTest {
             //given
             final Long menuId = 1L;
 
-            final Menu expetcedMenu = Menu.builder()
-                    .menuId(menuId)
-                    .name("name")
-                    .type(MenuType.BEVERAGE)
-                    .useYn("Y")
-                    .build();
+            final Menu expetcedMenu = new Menu(menuId, MenuType.BEVERAGE, "name", "Y");
 
             given(menuRepository.findById(menuId)).willReturn(Optional.of(expetcedMenu));
 
@@ -105,17 +96,9 @@ class MenuServiceTest {
             //given
             final Long menuId = 1L;
 
-            final Menu expetcedMenu = Menu.builder()
-                    .menuId(menuId)
-                    .name("name")
-                    .type(MenuType.BEVERAGE)
-                    .useYn("Y")
-                    .build();
+            final Menu expetcedMenu = new Menu(menuId, MenuType.BEVERAGE, "name", "Y");
 
-            final MenuUpdateRequest request = MenuUpdateRequest.builder()
-                    .name("댕장꿍")
-                    .type(MenuType.DESSERT)
-                    .build();
+            final MenuUpdateRequest request = MenuUpdateRequest.create(MenuType.DESSERT, "댕장꿍");
 
             given(menuRepository.findById(menuId)).willReturn(Optional.ofNullable(expetcedMenu));
 
@@ -129,10 +112,7 @@ class MenuServiceTest {
             //given
             final Long menuId = -1L;
 
-            final MenuUpdateRequest request = MenuUpdateRequest.builder()
-                    .name("댕장꿍")
-                    .type(MenuType.DESSERT)
-                    .build();
+            final MenuUpdateRequest request = MenuUpdateRequest.create(MenuType.DESSERT, "댕장꿍");
 
             given(menuRepository.findById(menuId)).willThrow(NotFoundException.class);
 
@@ -150,12 +130,7 @@ class MenuServiceTest {
             //given
             final Long menuId = 1L;
 
-            final Menu expetcedMenu = Menu.builder()
-                    .menuId(menuId)
-                    .name("name")
-                    .type(MenuType.BEVERAGE)
-                    .useYn("Y")
-                    .build();
+            final Menu expetcedMenu = new Menu(menuId, MenuType.BEVERAGE, "name", "Y");
 
             given(menuRepository.findById(menuId)).willReturn(Optional.ofNullable(expetcedMenu));
 

@@ -2,16 +2,25 @@ package com.project.springapistudy.menu.entity;
 
 import com.project.springapistudy.common.jpa.BaseEntity;
 import com.project.springapistudy.menu.domain.MenuType;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.ObjectUtils;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Getter
-@Builder
 @AllArgsConstructor
 @Table(name = "MENU")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -46,6 +55,16 @@ public class Menu extends BaseEntity {
         if (!ObjectUtils.isEmpty(menuType)) {
             this.type = menuType;
         }
+    }
+
+    public Menu(MenuType type, String name, String useYn) {
+        this.type = type;
+        this.name = name;
+        this.useYn = useYn;
+    }
+
+    public static Menu createMenu(MenuType type, String name, String useYn) {
+        return new Menu(type, name, useYn);
     }
 
     public void remove() {
