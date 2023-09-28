@@ -7,7 +7,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import static com.project.springapistudy.menu.domain.MenuValidateMessage.*;
+import static com.project.springapistudy.menu.domain.MenuValidateMessage.MENU_TYPE_IS_NOT_NULL;
+import static com.project.springapistudy.menu.domain.MenuValidateMessage.NAME_IS_NOT_NULL;
+import static com.project.springapistudy.menu.domain.MenuValidateMessage.NAME_SIZE_INVALID;
 
 @Getter
 public class MenuUpdateRequest {
