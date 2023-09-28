@@ -5,6 +5,7 @@ import com.project.springapistudy.menu.entity.Menu;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,10 +22,10 @@ public class MenuSaveRequest {
     private MenuType type;
 
     @Size(max = 32, message = NAME_SIZE_INVALID)
-    @NotEmpty(message = NAME_IS_NOT_NULL)
+    @NotBlank(message = NAME_IS_NOT_NULL)
     private String name;
 
-    @NotEmpty(message = USE_YN_IS_NOT_NULL)
+    @NotBlank(message = USE_YN_IS_NOT_NULL)
     private String useYn;
 
     public static MenuSaveRequest create(MenuType type, String name, String useYn) {

@@ -3,6 +3,7 @@ package com.project.springapistudy.menu.dto;
 import com.project.springapistudy.menu.domain.MenuType;
 import lombok.Getter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -17,7 +18,7 @@ public class MenuUpdateRequest {
     private MenuType type;
 
     @Size(max = 32, message = NAME_SIZE_INVALID)
-    @NotEmpty(message = NAME_IS_NOT_NULL)
+    @NotBlank(message = NAME_IS_NOT_NULL)
     private String name;
 
     public MenuUpdateRequest(MenuType type, String name) {
