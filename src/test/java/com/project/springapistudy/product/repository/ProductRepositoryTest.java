@@ -1,8 +1,8 @@
-package com.project.springapistudy.menu.repository;
+package com.project.springapistudy.product.repository;
 
 import com.project.springapistudy.common.jpa.JpaConfig;
-import com.project.springapistudy.menu.domain.MenuType;
-import com.project.springapistudy.menu.entity.Menu;
+import com.project.springapistudy.product.domain.ProductType;
+import com.project.springapistudy.product.entity.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,48 +21,48 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DataJpaTest
 @Import(JpaConfig.class)
 @ExtendWith(SpringExtension.class)
-class MenuRepositoryTest {
+class ProductRepositoryTest {
 
     @Autowired
-    private MenuRepository menuRepository;
+    private ProductRepository productRepository;
 
     @Nested
-    @DisplayName("메뉴명에 대한 유효성 검증")
+    @DisplayName("상품명에 대한 유효성 검증")
     class validateName {
         @ParameterizedTest
         @NullAndEmptySource
         @ValueSource(strings = {"가나다라마바사아자차카파타하가나다라마바사아자차카파타하가나다라마바사아자차카파타하"})
-        @DisplayName("메뉴명이 null 혹은 32자가 넘었을 경우 등록 실패")
+        @DisplayName("상품명이 null 혹은 32자가 넘었을 경우 등록 실패")
         void invalidName(String name) {
             //given
-            Menu menu = Menu.createMenu(MenuType.BEVERAGE, name, "Y");
+            Product product = Product.create(ProductType.BEVERAGE, name, "Y");
 
             //when
-            menuRepository.save(menu);
+            productRepository.save(product);
 
             //then
-            assertThrows(Exception.class, () -> menuRepository.flush());
+            assertThrows(Exception.class, () -> productRepository.flush());
         }
     }
 
     @Test
-    @DisplayName("menu 저장 성공")
+    @DisplayName("product 저장 성공")
     void saveSuccess() {
         //given
-        final MenuType menuType = MenuType.BEVERAGE;
+        final ProductType productType = ProductType.BEVERAGE;
         final String name = "아메리카노";
         final String useYn = "Y";
 
-        Menu menu = Menu.createMenu(menuType, name, useYn);
+        Product product = Product.create(productType, name, useYn);
 
         //when
-        Menu result = menuRepository.save(menu);
-        menuRepository.flush();
+        Product result = productRepository.save(product);
+        productRepository.flush();
 
         //then
         assertSoftly(softAssertions -> {
-            softAssertions.assertThat(result.getMenuId()).isNotZero().isNotNull();
-            softAssertions.assertThat(result.getType()).isEqualTo(menuType);
+            softAssertions.assertThat(result.getProductId()).isNotZero().isNotNull();
+            softAssertions.assertThat(result.getType()).isEqualTo(productType);
             softAssertions.assertThat(result.getName()).isEqualTo(name);
             softAssertions.assertThat(result.getUseYn()).isEqualTo(useYn);
         });

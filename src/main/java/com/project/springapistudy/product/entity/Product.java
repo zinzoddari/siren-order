@@ -1,7 +1,7 @@
-package com.project.springapistudy.menu.entity;
+package com.project.springapistudy.product.entity;
 
 import com.project.springapistudy.common.jpa.BaseEntity;
-import com.project.springapistudy.menu.domain.MenuType;
+import com.project.springapistudy.product.domain.ProductType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,22 +22,22 @@ import javax.validation.constraints.NotEmpty;
 @Entity
 @Getter
 @AllArgsConstructor
-@Table(name = "MENU")
+@Table(name = "PRODUCT")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Menu extends BaseEntity {
+public class Product extends BaseEntity {
     @Id
-    @Comment("메뉴 ID")
+    @Comment("상품 ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "MENU_ID", nullable = false)
-    private Long menuId;
+    @Column(name = "PRODUCT_ID", nullable = false)
+    private Long productId;
 
-    @Comment("메뉴 종류")
+    @Comment("상품 종류")
     @Column(name = "TYPE")
     @Enumerated(EnumType.STRING)
-    private MenuType type;
+    private ProductType type;
 
     @NotEmpty
-    @Comment("메뉴 명")
+    @Comment("상품 명")
     @Column(name = "NAME", nullable = false, length = 32)
     private String name;
 
@@ -51,20 +51,20 @@ public class Menu extends BaseEntity {
         }
     }
 
-    public void changeType(MenuType menuType) {
-        if (!ObjectUtils.isEmpty(menuType)) {
-            this.type = menuType;
+    public void changeType(ProductType productType) {
+        if (!ObjectUtils.isEmpty(productType)) {
+            this.type = productType;
         }
     }
 
-    public Menu(MenuType type, String name, String useYn) {
+    public Product(ProductType type, String name, String useYn) {
         this.type = type;
         this.name = name;
         this.useYn = useYn;
     }
 
-    public static Menu createMenu(MenuType type, String name, String useYn) {
-        return new Menu(type, name, useYn);
+    public static Product create(ProductType type, String name, String useYn) {
+        return new Product(type, name, useYn);
     }
 
     public void remove() {

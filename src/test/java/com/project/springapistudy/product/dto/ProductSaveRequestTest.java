@@ -1,6 +1,6 @@
-package com.project.springapistudy.menu.dto;
+package com.project.springapistudy.product.dto;
 
-import com.project.springapistudy.menu.domain.MenuType;
+import com.project.springapistudy.product.domain.ProductType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,23 +17,23 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-class MenuSaveRequestTest {
+class ProductSaveRequestTest {
     private static final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
     private static final Validator validator = validatorFactory.getValidator();
 
     @Nested
-    @DisplayName("메뉴 종류 유효성 검증")
-    class validateMenuType {
+    @DisplayName("상품 종류 유효성 검증")
+    class validateProductType {
         @ParameterizedTest
         @NullAndEmptySource
         @ValueSource(strings = {"SNACK", "과자"})
-        @DisplayName("존재하지 않는 메뉴 종류 입력시 유효성 검증 실패")
-        void invalidMenuType(String menuType) {
+        @DisplayName("존재하지 않는 상품 종류 입력시 유효성 검증 실패")
+        void invalidProductType(String productType) {
             //when
-            MenuSaveRequest request = MenuSaveRequest.create(MenuType.from(menuType), "name", "Y");
+            ProductSaveRequest request = ProductSaveRequest.create(ProductType.from(productType), "name", "Y");
 
-            Set<ConstraintViolation<MenuSaveRequest>> violations = validator.validate(request);
-            ConstraintViolation<MenuSaveRequest> result = violations.iterator().next();
+            Set<ConstraintViolation<ProductSaveRequest>> violations = validator.validate(request);
+            ConstraintViolation<ProductSaveRequest> result = violations.iterator().next();
 
             //then
             assertSoftly(softAssertions -> {
@@ -44,17 +44,17 @@ class MenuSaveRequestTest {
     }
 
     @Nested
-    @DisplayName("메뉴명 유효성 검증")
+    @DisplayName("상품명 유효성 검증")
     class validateName {
         @ParameterizedTest
         @NullAndEmptySource
         @DisplayName("name이 빈값 혹은 null 값으로 입력시 유효성 검증 실패")
         void nameIsNull(String name) {
             //when
-            MenuSaveRequest request = MenuSaveRequest.create(MenuType.BEVERAGE, name, "Y");
+            ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, name, "Y");
 
-            Set<ConstraintViolation<MenuSaveRequest>> violations = validator.validate(request);
-            ConstraintViolation<MenuSaveRequest> result = violations.iterator().next();
+            Set<ConstraintViolation<ProductSaveRequest>> violations = validator.validate(request);
+            ConstraintViolation<ProductSaveRequest> result = violations.iterator().next();
 
             //then
             assertSoftly(softAssertions -> {
@@ -64,16 +64,16 @@ class MenuSaveRequestTest {
         }
 
         @Test
-        @DisplayName("메뉴명으로 32자 넘는 입력값이 들어올 경우 유효성 검증 실패")
+        @DisplayName("상품명으로 32자 넘는 입력값이 들어올 경우 유효성 검증 실패")
         void invalidNameLength() {
             //given
             final String name = "가나다라마바사아자차카파타하가나다라마바사아자차카파타하가나다라마바사아자차카파타하";
 
             //when
-            MenuSaveRequest request = MenuSaveRequest.create(MenuType.BEVERAGE, name, "Y");
+            ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, name, "Y");
 
-            Set<ConstraintViolation<MenuSaveRequest>> violations = validator.validate(request);
-            ConstraintViolation<MenuSaveRequest> result = violations.iterator().next();
+            Set<ConstraintViolation<ProductSaveRequest>> violations = validator.validate(request);
+            ConstraintViolation<ProductSaveRequest> result = violations.iterator().next();
 
             //then
             assertSoftly(softAssertions -> {
@@ -91,10 +91,10 @@ class MenuSaveRequestTest {
         @DisplayName("사용여부가 null 혹은 빈 값이면 유효성 검증 실패")
         void useYnIsNotNull(String useYn) {
             //when
-            MenuSaveRequest request = MenuSaveRequest.create(MenuType.BEVERAGE, "name", useYn);
+            ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, "name", useYn);
 
-            Set<ConstraintViolation<MenuSaveRequest>> violations = validator.validate(request);
-            ConstraintViolation<MenuSaveRequest> result = violations.iterator().next();
+            Set<ConstraintViolation<ProductSaveRequest>> violations = validator.validate(request);
+            ConstraintViolation<ProductSaveRequest> result = violations.iterator().next();
 
             //then
             assertSoftly(softAssertions -> {
@@ -108,14 +108,14 @@ class MenuSaveRequestTest {
     @DisplayName("유효성 검증에 통과")
     void validDto() {
         //given
-        final MenuType menuType = MenuType.BEVERAGE;
+        final ProductType productType = ProductType.BEVERAGE;
         final String name = "아메리카노";
         final String useYn = "Y";
 
         //when
-        MenuSaveRequest request = MenuSaveRequest.create(menuType, name, useYn);
+        ProductSaveRequest request = ProductSaveRequest.create(productType, name, useYn);
 
-        Set<ConstraintViolation<MenuSaveRequest>> violations = validator.validate(request);
+        Set<ConstraintViolation<ProductSaveRequest>> violations = validator.validate(request);
 
         //then
         assertThat(violations).size().isZero();

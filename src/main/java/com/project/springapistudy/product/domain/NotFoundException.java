@@ -1,4 +1,4 @@
-package com.project.springapistudy.menu.domain;
+package com.project.springapistudy.product.domain;
 
 import javax.persistence.NoResultException;
 
