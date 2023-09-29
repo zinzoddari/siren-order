@@ -16,7 +16,7 @@ public class BaseEntity {
 
     @CreatedDate
     @Comment("생성일")
-    @Column(name = "REG_DATE", updatable = false)
+    @Column(name = "REG_DATE", updatable = false, nullable = false)
     private LocalDateTime registerDate;
 
     @LastModifiedDate

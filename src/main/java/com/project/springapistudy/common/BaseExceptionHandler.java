@@ -1,6 +1,6 @@
 package com.project.springapistudy.common;
 
-import com.project.springapistudy.menu.domain.NotFoundException;
+import com.project.springapistudy.product.domain.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
