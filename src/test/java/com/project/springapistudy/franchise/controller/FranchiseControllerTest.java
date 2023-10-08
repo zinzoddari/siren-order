@@ -58,13 +58,34 @@ class FranchiseControllerTest {
     class findProductId {
         @Test
         @DisplayName("정상 조회 성공")
-        void success() {
-            //TODO: 저장 기능 후에 조회 할 수 있도록
+        void success() throws Exception {
             //given
+            final String name = "카페success";
+            final String englishName = "name";
+            final String useYn = "Y";
+
+            final String request = "{\n" +
+                    "    \"name\": \"" + name + "\",\n" +
+                    "    \"englishName\": \"" + englishName + "\",\n" +
+                    "    \"useYn\": \"" + useYn + "\"\n" +
+                    "}";
+
+            String url = 프랜차이즈를_저장함(request);
 
             //when
+            MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andReturn();
+
+            FranchiseResponse response = 응답값을_객체에_매핑함(mvcResult, FranchiseResponse.class);
 
             //then
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(response.getFranchiseId()).isNotZero();
+                softAssertions.assertThat(response.getName()).isEqualTo(name);
+                softAssertions.assertThat(response.getEnglishName()).isEqualTo(englishName);
+            });
         }
 
         @Test
