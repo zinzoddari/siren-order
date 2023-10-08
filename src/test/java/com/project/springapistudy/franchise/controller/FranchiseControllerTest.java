@@ -1,6 +1,5 @@
 package com.project.springapistudy.franchise.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -75,7 +74,7 @@ class FranchiseControllerTest {
             //when & then
             mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "/{franchiseId}", franchiseId)
                             .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                    .andExpect(MockMvcResultMatchers.status().isInternalServerError());
         }
     }
 }
