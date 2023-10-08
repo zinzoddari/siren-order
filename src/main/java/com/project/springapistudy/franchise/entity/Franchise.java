@@ -39,4 +39,14 @@ public class Franchise extends BaseEntity {
     @Comment("사용여부")
     @Column(name = "USE_YN")
     private String useYn;
+
+    public Franchise(String name, String englishName, String useYn) {
+        this.name = name;
+        this.englishName = englishName;
+        this.useYn = useYn;
+    }
+
+    public static Franchise create(String name, String englishName, String useYn) {
+        return new Franchise(name, englishName, useYn);
+    }
 }

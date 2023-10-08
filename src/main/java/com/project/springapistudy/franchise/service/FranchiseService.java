@@ -1,6 +1,8 @@
 package com.project.springapistudy.franchise.service;
 
+import com.project.springapistudy.franchise.domain.DuplicateException;
 import com.project.springapistudy.franchise.dto.FranchiseResponse;
+import com.project.springapistudy.franchise.dto.FranchiseSaveRequest;
 import com.project.springapistudy.franchise.entity.Franchise;
 import com.project.springapistudy.franchise.repository.FranchiseRepository;
 import com.project.springapistudy.product.domain.NotFoundException;
@@ -19,5 +21,15 @@ public class FranchiseService {
                 .orElseThrow(NotFoundException::new);
 
         return FranchiseResponse.fromEntity(franchise);
+    }
+
+    @Transactional
+    public Long registerFranchise(FranchiseSaveRequest request) {
+        franchiseRepository.findByName(request.getName()).ifPresent(franchise -> {
+            throw new DuplicateException();
+        });
+
+        return franchiseRepository.save(request.toEntity())
+                .getId();
     }
 }
