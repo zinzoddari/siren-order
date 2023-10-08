@@ -1,5 +1,6 @@
 package com.project.springapistudy.franchise.dto;
 
+import com.project.springapistudy.franchise.entity.Franchise;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -32,5 +33,9 @@ public class FranchiseSaveRequest {
 
     public static FranchiseSaveRequest create(String name, String englishName, String useYn) {
         return new FranchiseSaveRequest(name, englishName, useYn);
+    }
+
+    public Franchise toEntity() {
+        return Franchise.create(this.name, this.englishName, this.useYn);
     }
 }
