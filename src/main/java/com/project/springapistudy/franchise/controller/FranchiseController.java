@@ -2,6 +2,7 @@ package com.project.springapistudy.franchise.controller;
 
 import com.project.springapistudy.franchise.dto.FranchiseResponse;
 import com.project.springapistudy.franchise.dto.FranchiseSaveRequest;
+import com.project.springapistudy.franchise.dto.FranchiseUpdateRequest;
 import com.project.springapistudy.franchise.service.FranchiseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,5 +41,11 @@ class FranchiseController {
                         .buildAndExpand(response)
                         .toUri())
                 .build();
+    }
+
+    @PutMapping("/{franchiseId}")
+    public void modifyFranchiseId(@PathVariable @Min(1) long franchiseId
+            , @RequestBody @Valid FranchiseUpdateRequest request) {
+        franchiseService.modifyFranchise(franchiseId, request);
     }
 }

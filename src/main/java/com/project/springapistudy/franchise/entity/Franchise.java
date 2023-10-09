@@ -1,6 +1,7 @@
 package com.project.springapistudy.franchise.entity;
 
 import com.project.springapistudy.common.jpa.BaseEntity;
+import com.project.springapistudy.common.utils.StringUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,5 +49,23 @@ public class Franchise extends BaseEntity {
 
     public static Franchise create(String name, String englishName, String useYn) {
         return new Franchise(name, englishName, useYn);
+    }
+
+    public void modifyName(String name) {
+        if (StringUtils.isNotEmpty(name)) {
+            this.name = name;
+        }
+    }
+
+    public void modifyEnglishName(String englishName) {
+        if (StringUtils.isNotEmpty(englishName)) {
+            this.englishName = englishName;
+        }
+    }
+
+    public void modifyUseYn(String useYn) {
+        if (StringUtils.isNotEmpty(useYn)) {
+            this.useYn = useYn;
+        }
     }
 }
