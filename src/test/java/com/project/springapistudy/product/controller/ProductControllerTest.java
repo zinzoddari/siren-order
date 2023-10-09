@@ -6,6 +6,7 @@ import com.project.springapistudy.product.domain.ProductType;
 import com.project.springapistudy.product.dto.ProductResponse;
 import com.project.springapistudy.product.dto.ProductSaveRequest;
 import com.project.springapistudy.product.dto.ProductUpdateRequest;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,9 +25,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -117,6 +120,20 @@ class ProductControllerTest {
                 softAssertions.assertThat(response.getName()).isEqualTo(request.getName());
                 softAssertions.assertThat(response.getType()).isEqualTo(request.getType());
             });
+        }
+
+        @Test
+        @DisplayName("useYn이 N인 상품 조회 시 null 출력")
+        void useYnIsN() throws Exception {
+            //given
+            final ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, "초코바나나", Flag.N);
+            final String selectUrl = 상품_저장_성공(request);
+
+            //when & then
+            mockMvc.perform(MockMvcRequestBuilders.get(selectUrl)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(jsonPath("$").doesNotExist());
         }
 
         @Test
@@ -251,15 +268,11 @@ class ProductControllerTest {
 
             final Long productId = product.getProductId();
 
-            //when
+            //when & then
             mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/{productId}", productId)
                             .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(MockMvcResultMatchers.status().isOk());
-
-            final ProductResponse result = 응답값을_객체에_매핑함(상품을_조회함(selectUrl), ProductResponse.class);
-
-            //then
-            assertThat(result.getUseYn().isY()).isFalse();
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(jsonPath("$").doesNotExist());
         }
 
         @Test
@@ -291,7 +304,7 @@ class ProductControllerTest {
         String request = "{\n" +
                 "    \"type\": \"" + input.getType() + "\",\n" +
                 "    \"name\": \"" + input.getName() + "\",\n" +
-                "    \"useYn\": \"Y\"\n" +
+                "    \"useYn\": \"" + input.getUseYn() + "\"\n" +
                 "}";
 
         //when

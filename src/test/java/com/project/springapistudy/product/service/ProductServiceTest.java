@@ -8,6 +8,7 @@ import com.project.springapistudy.product.dto.ProductSaveRequest;
 import com.project.springapistudy.product.dto.ProductUpdateRequest;
 import com.project.springapistudy.product.entity.Product;
 import com.project.springapistudy.product.repository.ProductRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

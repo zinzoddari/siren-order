@@ -73,4 +73,8 @@ public class Franchise extends BaseEntity {
             this.useYn = useYn;
         }
     }
+
+    public boolean isNotUse() {
+        return !this.useYn.isY();
+    }
 }

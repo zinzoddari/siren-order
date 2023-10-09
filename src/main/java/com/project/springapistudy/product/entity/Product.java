@@ -69,6 +69,10 @@ public class Product extends BaseEntity {
         return new Product(type, name, useYn);
     }
 
+    public boolean isNotUse() {
+        return !this.useYn.isY();
+    }
+
     public void remove() {
         this.useYn = Flag.N;
     }

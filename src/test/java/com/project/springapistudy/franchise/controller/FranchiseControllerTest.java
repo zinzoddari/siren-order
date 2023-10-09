@@ -2,6 +2,7 @@ package com.project.springapistudy.franchise.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.springapistudy.common.InvalidResponse;
+import com.project.springapistudy.common.domain.Flag;
 import com.project.springapistudy.franchise.dto.FranchiseResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -98,6 +100,25 @@ class FranchiseControllerTest {
             mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "/{franchiseId}", franchiseId)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        }
+
+        @Test
+        @DisplayName("useYn이 N인 경우 null 응답")
+        void useYnIsN() throws Exception {
+            //given
+            final Flag useYn = Flag.N;
+            final String request = "{\n" +
+                    "    \"name\": \"useYn이 N인 경우 null 응답\",\n" +
+                    "    \"useYn\": \"" + useYn + "\"\n" +
+                    "}";
+
+            String url = 프랜차이즈를_저장함(request);
+
+            //when & then
+            mockMvc.perform(MockMvcRequestBuilders.get(url)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(jsonPath("$").doesNotExist());
         }
 
         @Test
