@@ -1,5 +1,6 @@
 package com.project.springapistudy.product.service;
 
+import com.project.springapistudy.common.domain.Flag;
 import com.project.springapistudy.product.domain.ProductType;
 import com.project.springapistudy.product.domain.NotFoundException;
 import com.project.springapistudy.product.dto.ProductResponse;
@@ -39,7 +40,7 @@ class ProductServiceTest {
         @DisplayName("상품 등록 성공")
         void success() {
             //given
-            ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, "얼음 뺀 아이스 아메리카노", "Y");
+            ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, "얼음 뺀 아이스 아메리카노", Flag.Y);
 
             Product expectedProduct = request.toEntity();
 
@@ -59,7 +60,7 @@ class ProductServiceTest {
             //given
             final Long productId = 1L;
 
-            final Product expetcedProduct = new Product(productId, ProductType.BEVERAGE, "name", "Y");
+            final Product expetcedProduct = new Product(productId, ProductType.BEVERAGE, "name", Flag.Y);
 
             given(productRepository.findById(productId)).willReturn(Optional.of(expetcedProduct));
 
@@ -96,7 +97,7 @@ class ProductServiceTest {
             //given
             final Long productId = 1L;
 
-            final Product expetcedProduct = new Product(productId, ProductType.BEVERAGE, "name", "Y");
+            final Product expetcedProduct = new Product(productId, ProductType.BEVERAGE, "name", Flag.Y);
 
             final ProductUpdateRequest request = ProductUpdateRequest.create(ProductType.DESSERT, "댕장꿍");
 
@@ -130,7 +131,7 @@ class ProductServiceTest {
             //given
             final Long productId = 1L;
 
-            final Product expetcedProduct = new Product(productId, ProductType.BEVERAGE, "name", "Y");
+            final Product expetcedProduct = new Product(productId, ProductType.BEVERAGE, "name", Flag.Y);
 
             given(productRepository.findById(productId)).willReturn(Optional.ofNullable(expetcedProduct));
 
@@ -138,7 +139,7 @@ class ProductServiceTest {
             productService.removeProduct(productId);
 
             //then
-            assertThat(expetcedProduct.getUseYn()).isEqualTo("N");
+            assertThat(expetcedProduct.getUseYn().isY()).isFalse();
         }
 
         @Test

@@ -310,7 +310,7 @@ class FranchiseControllerTest {
             //then
             assertSoftly(softAssertions -> {
                 softAssertions.assertThat(response.getField()).isEqualTo("useYn");
-                softAssertions.assertThat(response.getRejectValue()).isEqualTo(useYn);
+                softAssertions.assertThat(response.getRejectValue()).isEqualTo(null);
             });
         }
     }

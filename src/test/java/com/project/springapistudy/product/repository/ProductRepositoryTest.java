@@ -1,5 +1,6 @@
 package com.project.springapistudy.product.repository;
 
+import com.project.springapistudy.common.domain.Flag;
 import com.project.springapistudy.common.jpa.JpaConfig;
 import com.project.springapistudy.product.domain.ProductType;
 import com.project.springapistudy.product.entity.Product;
@@ -35,7 +36,7 @@ class ProductRepositoryTest {
         @DisplayName("상품명이 null 혹은 32자가 넘었을 경우 등록 실패")
         void invalidName(String name) {
             //given
-            Product product = Product.create(ProductType.BEVERAGE, name, "Y");
+            Product product = Product.create(ProductType.BEVERAGE, name, Flag.Y);
 
             //when
             productRepository.save(product);
@@ -51,9 +52,9 @@ class ProductRepositoryTest {
         //given
         final ProductType productType = ProductType.BEVERAGE;
         final String name = "아메리카노";
-        final String useYn = "Y";
+        final Flag useYn = Flag.Y;
 
-        Product product = Product.create(productType, name, useYn);
+        Product product = Product.create(productType, name, Flag.Y);
 
         //when
         Product result = productRepository.save(product);

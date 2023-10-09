@@ -1,6 +1,7 @@
 package com.project.springapistudy.product.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.springapistudy.common.domain.Flag;
 import com.project.springapistudy.product.domain.ProductType;
 import com.project.springapistudy.product.dto.ProductResponse;
 import com.project.springapistudy.product.dto.ProductSaveRequest;
@@ -99,7 +100,7 @@ class ProductControllerTest {
         @DisplayName("상품 단건 조회 성공")
         void success() throws Exception {
             //given
-            final ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, "바나나", "Y");
+            final ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, "바나나", Flag.Y);
             final String selectUrl = 상품_저장_성공(request);
 
             //when
@@ -150,7 +151,7 @@ class ProductControllerTest {
         @DisplayName("상품 수정 성공")
         void success() throws Exception {
             //given
-            final ProductSaveRequest saveProduct = ProductSaveRequest.create(ProductType.BEVERAGE, "바나나", "Y");
+            final ProductSaveRequest saveProduct = ProductSaveRequest.create(ProductType.BEVERAGE, "바나나", Flag.Y);
             final String selectUrl = 상품_저장_성공(saveProduct);
 
             final ProductResponse product = 응답값을_객체에_매핑함(상품을_조회함(selectUrl), ProductResponse.class);
@@ -199,7 +200,7 @@ class ProductControllerTest {
         void invalidProductType() throws Exception {
             //given
             final String invalidProductType = "AAA";
-            final ProductSaveRequest saveProduct = ProductSaveRequest.create(ProductType.BEVERAGE, "바나나", "Y");
+            final ProductSaveRequest saveProduct = ProductSaveRequest.create(ProductType.BEVERAGE, "바나나", Flag.Y);
 
             final String selectUrl = 상품_저장_성공(saveProduct);
 
@@ -243,7 +244,7 @@ class ProductControllerTest {
         @DisplayName("상품 삭제에 성공")
         void success() throws Exception {
             //given
-            final ProductSaveRequest saveProduct = ProductSaveRequest.create(ProductType.BEVERAGE, "바나나", "Y");
+            final ProductSaveRequest saveProduct = ProductSaveRequest.create(ProductType.BEVERAGE, "바나나", Flag.Y);
             final String selectUrl = 상품_저장_성공(saveProduct);
 
             final ProductResponse product = 응답값을_객체에_매핑함(상품을_조회함(selectUrl), ProductResponse.class);
@@ -258,7 +259,7 @@ class ProductControllerTest {
             final ProductResponse result = 응답값을_객체에_매핑함(상품을_조회함(selectUrl), ProductResponse.class);
 
             //then
-            assertThat(result.getUseYn()).isEqualTo("N");
+            assertThat(result.getUseYn().isY()).isFalse();
         }
 
         @Test

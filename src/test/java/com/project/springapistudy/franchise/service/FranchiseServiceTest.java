@@ -1,5 +1,6 @@
 package com.project.springapistudy.franchise.service;
 
+import com.project.springapistudy.common.domain.Flag;
 import com.project.springapistudy.franchise.domain.DuplicateException;
 import com.project.springapistudy.franchise.dto.FranchiseResponse;
 import com.project.springapistudy.franchise.dto.FranchiseSaveRequest;
@@ -42,7 +43,7 @@ class FranchiseServiceTest {
         void success() {
             //given
             final Long franchiseId = -1L;
-            final Franchise expectedFranchise = new Franchise(franchiseId, "name", "englishName", "Y");
+            final Franchise expectedFranchise = new Franchise(franchiseId, "name", "englishName", Flag.Y);
 
             given(franchiseRepository.findById(franchiseId)).willReturn(Optional.of(expectedFranchise));
 
@@ -79,7 +80,7 @@ class FranchiseServiceTest {
             //given
             final String name = "카페";
             final String englishName = null;
-            final String useYn = "Y";
+            final Flag useYn = Flag.Y;
 
             final FranchiseSaveRequest request = FranchiseSaveRequest.create(name, englishName, useYn);
 
@@ -99,7 +100,7 @@ class FranchiseServiceTest {
             //given
             final String name = "카페";
             final String englishName = null;
-            final String useYn = "Y";
+            final Flag useYn = Flag.Y;
 
             final FranchiseSaveRequest request = FranchiseSaveRequest.create(name, englishName, useYn);
 
@@ -155,8 +156,8 @@ class FranchiseServiceTest {
             final String name = "변경될 이름";
             final FranchiseUpdateRequest request = FranchiseUpdateRequest.create(name, "englishName");
 
-            given(franchiseRepository.findById(franchiseId)).willReturn(Optional.of(new Franchise(null, null, null)));
-            given(franchiseRepository.findByName(name)).willReturn(Optional.of(new Franchise(name, null, null)));
+            given(franchiseRepository.findById(franchiseId)).willReturn(Optional.of(new Franchise(null, null, Flag.Y)));
+            given(franchiseRepository.findByName(name)).willReturn(Optional.of(new Franchise(name, null, Flag.Y)));
 
             //when & then
             assertThrows(DuplicateException.class, () -> franchiseService.modifyFranchise(franchiseId, request));

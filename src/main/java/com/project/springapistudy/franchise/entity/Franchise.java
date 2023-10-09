@@ -1,5 +1,6 @@
 package com.project.springapistudy.franchise.entity;
 
+import com.project.springapistudy.common.domain.Flag;
 import com.project.springapistudy.common.jpa.BaseEntity;
 import com.project.springapistudy.common.utils.StringUtils;
 import lombok.AccessLevel;
@@ -7,9 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,15 +43,16 @@ public class Franchise extends BaseEntity {
 
     @Comment("사용여부")
     @Column(name = "USE_YN")
-    private String useYn;
+    @Enumerated(EnumType.STRING)
+    private Flag useYn;
 
-    public Franchise(String name, String englishName, String useYn) {
+    public Franchise(String name, String englishName, Flag useYn) {
         this.name = name;
         this.englishName = englishName;
         this.useYn = useYn;
     }
 
-    public static Franchise create(String name, String englishName, String useYn) {
+    public static Franchise create(String name, String englishName, Flag useYn) {
         return new Franchise(name, englishName, useYn);
     }
 
@@ -63,8 +68,8 @@ public class Franchise extends BaseEntity {
         }
     }
 
-    public void modifyUseYn(String useYn) {
-        if (StringUtils.isNotEmpty(useYn)) {
+    public void modifyUseYn(Flag useYn) {
+        if (!ObjectUtils.isEmpty(useYn)) {
             this.useYn = useYn;
         }
     }

@@ -1,5 +1,6 @@
 package com.project.springapistudy.product.dto;
 
+import com.project.springapistudy.common.domain.Flag;
 import com.project.springapistudy.product.domain.ProductType;
 import com.project.springapistudy.product.entity.Product;
 import lombok.AllArgsConstructor;
@@ -9,9 +10,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import static com.project.springapistudy.product.domain.ProductValidateMessage.PRODUCT_TYPE_IS_NOT_NULL;
 import static com.project.springapistudy.product.domain.ProductValidateMessage.PRODUCT_IS_NOT_NULL;
 import static com.project.springapistudy.product.domain.ProductValidateMessage.PRODUCT_SIZE_INVALID;
+import static com.project.springapistudy.product.domain.ProductValidateMessage.PRODUCT_TYPE_IS_NOT_NULL;
 import static com.project.springapistudy.product.domain.ProductValidateMessage.USE_YN_IS_NOT_NULL;
 
 @Getter
@@ -24,10 +25,10 @@ public class ProductSaveRequest {
     @NotBlank(message = PRODUCT_IS_NOT_NULL)
     private String name;
 
-    @NotBlank(message = USE_YN_IS_NOT_NULL)
-    private String useYn;
+    @NotNull(message = USE_YN_IS_NOT_NULL)
+    private Flag useYn;
 
-    public static ProductSaveRequest create(ProductType type, String name, String useYn) {
+    public static ProductSaveRequest create(ProductType type, String name, Flag useYn) {
         return new ProductSaveRequest(type, name, useYn);
     }
 

@@ -1,5 +1,6 @@
 package com.project.springapistudy.franchise.dto;
 
+import com.project.springapistudy.common.domain.Flag;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ class FranchiseSaveRequestTest {
         @DisplayName("프랜차이즈명이 null 혹은 빈값이면 오류")
         void invalidName(String name) {
             //given
-            FranchiseSaveRequest request = FranchiseSaveRequest.create(name, "english", "Y");
+            FranchiseSaveRequest request = FranchiseSaveRequest.create(name, "english", Flag.Y);
 
             //when
             Set<ConstraintViolation<FranchiseSaveRequest>> violations = validator.validate(request);
@@ -46,7 +47,7 @@ class FranchiseSaveRequestTest {
         void invalidNameSize() {
             //given
             final String name = "가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마";
-            final FranchiseSaveRequest request = FranchiseSaveRequest.create(name, "english", "Y");
+            final FranchiseSaveRequest request = FranchiseSaveRequest.create(name, "english", Flag.Y);
 
             //when
             Set<ConstraintViolation<FranchiseSaveRequest>> violations = validator.validate(request);
@@ -68,7 +69,7 @@ class FranchiseSaveRequestTest {
         void invalidEnglishNameSize() {
             //given
             final String englishName = "ABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCDEF";
-            final FranchiseSaveRequest request = FranchiseSaveRequest.create("이름", englishName, "Y");
+            final FranchiseSaveRequest request = FranchiseSaveRequest.create("이름", englishName, Flag.Y);
 
             //when
             Set<ConstraintViolation<FranchiseSaveRequest>> violations = validator.validate(request);
@@ -87,9 +88,8 @@ class FranchiseSaveRequestTest {
     class validateUseYn {
         @ParameterizedTest
         @NullSource
-        @ValueSource(strings = {"", " "})
         @DisplayName("사용여부가 null 혹은 빈값이면 오류")
-        void invalidUseYn(String useYn) {
+        void invalidUseYn(Flag useYn) {
             //given
             FranchiseSaveRequest request = FranchiseSaveRequest.create("이름", "english", useYn);
 
@@ -111,7 +111,7 @@ class FranchiseSaveRequestTest {
         //given
         final String name = "스벅타스";
         final String englishName = "buckStarts";
-        final String useYn = "Y";
+        final Flag useYn = Flag.Y;
 
         //when
         FranchiseSaveRequest result = FranchiseSaveRequest.create(name, englishName, useYn);
