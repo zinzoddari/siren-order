@@ -1,5 +1,6 @@
 package com.project.springapistudy.product.entity;
 
+import com.project.springapistudy.common.domain.Flag;
 import com.project.springapistudy.common.jpa.BaseEntity;
 import com.project.springapistudy.product.domain.ProductType;
 import lombok.AccessLevel;
@@ -43,7 +44,8 @@ public class Product extends BaseEntity {
 
     @Comment("사용여부")
     @Column(name = "USE_YN")
-    private String useYn;
+    @Enumerated(EnumType.STRING)
+    private Flag useYn;
 
     public void changeName(String name) {
         if (!ObjectUtils.isEmpty(name)) {
@@ -57,17 +59,21 @@ public class Product extends BaseEntity {
         }
     }
 
-    public Product(ProductType type, String name, String useYn) {
+    public Product(ProductType type, String name, Flag useYn) {
         this.type = type;
         this.name = name;
         this.useYn = useYn;
     }
 
-    public static Product create(ProductType type, String name, String useYn) {
+    public static Product create(ProductType type, String name, Flag useYn) {
         return new Product(type, name, useYn);
     }
 
+    public boolean isNotUse() {
+        return !this.useYn.isY();
+    }
+
     public void remove() {
-        this.useYn = "N";
+        this.useYn = Flag.N;
     }
 }

@@ -1,5 +1,6 @@
 package com.project.springapistudy.product.service;
 
+import com.project.springapistudy.common.domain.Flag;
 import com.project.springapistudy.product.domain.NotFoundException;
 import com.project.springapistudy.product.dto.ProductResponse;
 import com.project.springapistudy.product.dto.ProductSaveRequest;
@@ -17,9 +18,12 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductResponse findProduct(long productId) {
-        //TODO: useYn이 N이면 조회가 되지 않는 요건이 필요할 것 같음
         Product product = productRepository.findById(productId)
                 .orElseThrow(NotFoundException::new);
+
+        if(product.isNotUse()) {
+            product = null;
+        }
 
         return ProductResponse.fromEntity(product);
     }

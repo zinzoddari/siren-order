@@ -1,11 +1,13 @@
 package com.project.springapistudy.product.dto;
 
+import com.project.springapistudy.common.domain.Flag;
 import com.project.springapistudy.product.domain.ProductType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import javax.validation.ConstraintViolation;
@@ -30,7 +32,7 @@ class ProductSaveRequestTest {
         @DisplayName("존재하지 않는 상품 종류 입력시 유효성 검증 실패")
         void invalidProductType(String productType) {
             //when
-            ProductSaveRequest request = ProductSaveRequest.create(ProductType.from(productType), "name", "Y");
+            ProductSaveRequest request = ProductSaveRequest.create(ProductType.from(productType), "name", Flag.Y);
 
             Set<ConstraintViolation<ProductSaveRequest>> violations = validator.validate(request);
             ConstraintViolation<ProductSaveRequest> result = violations.iterator().next();
@@ -51,7 +53,7 @@ class ProductSaveRequestTest {
         @DisplayName("name이 빈값 혹은 null 값으로 입력시 유효성 검증 실패")
         void nameIsNull(String name) {
             //when
-            ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, name, "Y");
+            ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, name, Flag.Y);
 
             Set<ConstraintViolation<ProductSaveRequest>> violations = validator.validate(request);
             ConstraintViolation<ProductSaveRequest> result = violations.iterator().next();
@@ -70,7 +72,7 @@ class ProductSaveRequestTest {
             final String name = "가나다라마바사아자차카파타하가나다라마바사아자차카파타하가나다라마바사아자차카파타하";
 
             //when
-            ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, name, "Y");
+            ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, name, Flag.Y);
 
             Set<ConstraintViolation<ProductSaveRequest>> violations = validator.validate(request);
             ConstraintViolation<ProductSaveRequest> result = violations.iterator().next();
@@ -87,11 +89,12 @@ class ProductSaveRequestTest {
     @DisplayName("사용여부 유효성 검증")
     class validateUseYn {
         @ParameterizedTest
-        @NullAndEmptySource
+        @ValueSource(strings = {"", " "})
+        @NullSource
         @DisplayName("사용여부가 null 혹은 빈 값이면 유효성 검증 실패")
         void useYnIsNotNull(String useYn) {
             //when
-            ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, "name", useYn);
+            ProductSaveRequest request = ProductSaveRequest.create(ProductType.BEVERAGE, "name", Flag.from(useYn));
 
             Set<ConstraintViolation<ProductSaveRequest>> violations = validator.validate(request);
             ConstraintViolation<ProductSaveRequest> result = violations.iterator().next();
@@ -110,7 +113,7 @@ class ProductSaveRequestTest {
         //given
         final ProductType productType = ProductType.BEVERAGE;
         final String name = "아메리카노";
-        final String useYn = "Y";
+        final Flag useYn = Flag.Y;
 
         //when
         ProductSaveRequest request = ProductSaveRequest.create(productType, name, useYn);

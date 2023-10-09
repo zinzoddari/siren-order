@@ -21,6 +21,10 @@ public class FranchiseService {
         Franchise franchise = franchiseRepository.findById(franchiseId)
                 .orElseThrow(NotFoundException::new);
 
+        if(franchise.isNotUse()) {
+            franchise = null;
+        }
+
         return FranchiseResponse.fromEntity(franchise);
     }
 

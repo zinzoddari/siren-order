@@ -1,5 +1,6 @@
 package com.project.springapistudy.franchise.entity;
 
+import com.project.springapistudy.common.domain.Flag;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ class FranchiseTest {
             //given
             final String name = "name";
             final String englishName = "englishName";
-            final String useYn = "Y";
+            final Flag useYn = Flag.Y;
 
             final Franchise franchise = new Franchise(1L, name, englishName, useYn);
 
@@ -39,7 +40,7 @@ class FranchiseTest {
             //given
             final String name = "name";
             final String englishName = "englishName";
-            final String useYn = "Y";
+            final Flag useYn = Flag.Y;
 
             final Franchise franchise = new Franchise(1L, name, englishName, useYn);
 
@@ -60,7 +61,7 @@ class FranchiseTest {
             //given
             final String name = "name";
             final String englishName = "englishName";
-            final String useYn = "Y";
+            final Flag useYn = Flag.Y;
 
             final Franchise franchise = new Franchise(1L, name, englishName, useYn);
 
@@ -79,7 +80,7 @@ class FranchiseTest {
             //given
             final String name = "name";
             final String englishName = "englishName";
-            final String useYn = "Y";
+            final Flag useYn = Flag.Y;
 
             final Franchise franchise = new Franchise(1L, name, englishName, useYn);
 
@@ -100,12 +101,12 @@ class FranchiseTest {
             //given
             final String name = "name";
             final String englishName = "englishName";
-            final String useYn = "Y";
+            final Flag useYn = Flag.Y;
 
             final Franchise franchise = new Franchise(1L, name, englishName, useYn);
 
             //when
-            franchise.modifyUseYn("N");
+            franchise.modifyUseYn(Flag.N);
 
             //then
             assertThat(franchise.getUseYn()).isNotEqualTo(useYn);
@@ -119,7 +120,7 @@ class FranchiseTest {
             //given
             final String name = "name";
             final String englishName = "englishName";
-            final String useYn = "Y";
+            final Flag useYn = Flag.Y;
 
             final Franchise franchise = new Franchise(1L, name, englishName, useYn);
 
