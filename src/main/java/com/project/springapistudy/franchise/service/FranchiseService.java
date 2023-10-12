@@ -21,7 +21,7 @@ public class FranchiseService {
         Franchise franchise = franchiseRepository.findById(franchiseId)
                 .orElseThrow(NotFoundException::new);
 
-        if(franchise.isNotUse()) {
+        if (franchise.isNotUse()) {
             franchise = null;
         }
 
@@ -49,5 +49,13 @@ public class FranchiseService {
 
         franchise.modifyName(request.getName());
         franchise.modifyEnglishName(request.getEnglishName());
+    }
+
+    @Transactional
+    public void removeFranchise(long franchiseId) {
+        Franchise franchise = franchiseRepository.findById(franchiseId)
+                .orElseThrow(NotFoundException::new);
+
+        franchise.remove();
     }
 }
