@@ -537,6 +537,58 @@ class FranchiseControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("프랜차이즈 삭제 요청")
+    class removeFranchiseId {
+        @Test
+        @DisplayName("프랜차이즈 삭제 성공")
+        void success() throws Exception {
+            //given
+            final String saveRequest = "{\n" +
+                    "    \"name\": \"notFoundName\",\n" +
+                    "    \"useYn\": \"Y\"\n" +
+                    "}";
+
+            final long franchiseId = 응답값을_객체에_매핑함(프랜차이즈를_조회함(프랜차이즈를_저장함(saveRequest)), FranchiseResponse.class)
+                    .getFranchiseId();
+
+            //when
+            mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/{franchiseId}", franchiseId)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isOk());
+
+            //then
+            mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "/{franchiseId}", franchiseId)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(jsonPath("$").doesNotExist());
+        }
+
+        @Test
+        @DisplayName("삭제하고자 하는 franchiseId 유효성 검증 실패시 400 출력")
+        void invalidSizeFranchiseId() throws Exception {
+            //given
+            final String invalidFranchiseId = "-1";
+
+            //when & then
+            mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/{franchiseId}", invalidFranchiseId)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        }
+
+        @Test
+        @DisplayName("없는 프랜차이즈 삭제 요청 시 400 오류")
+        void notFound() throws Exception {
+            //given
+            final String franchiseId = "999999999";
+
+            //then
+            mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/{franchiseId}", franchiseId)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isNotFound());
+        }
+    }
+
     private MvcResult 프랜차이즈를_조회함(String url) throws Exception {
         return mockMvc.perform(MockMvcRequestBuilders.get(url)
                         .contentType(MediaType.APPLICATION_JSON))

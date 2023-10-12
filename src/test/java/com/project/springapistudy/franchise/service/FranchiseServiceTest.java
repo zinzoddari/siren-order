@@ -163,4 +163,35 @@ class FranchiseServiceTest {
             assertThrows(DuplicateException.class, () -> franchiseService.modifyFranchise(franchiseId, request));
         }
     }
+
+    @Nested
+    @DisplayName("프랜차이즈 삭제")
+    class removeFranchise {
+        @Test
+        @DisplayName("삭제에 성공")
+        void success() {
+            //given
+
+            final long franchiseId = 1L;
+            final Franchise franchise = mock(Franchise.class);
+
+            given(franchiseRepository.findById(any())).willReturn(Optional.of(franchise));
+
+            //when & then
+            assertDoesNotThrow(() -> franchiseService.removeFranchise(franchiseId));
+            then(franchise).should().remove();
+        }
+
+        @Test
+        @DisplayName("삭제하고자 하는 프랜차이즈가 없어서 오류")
+        void notFound() {
+            //given
+            final long franchiseId = -1L;
+
+            given(franchiseRepository.findById(any())).willReturn(Optional.empty());
+
+            //when & then
+            assertThrows(NotFoundException.class, () -> franchiseService.removeFranchise(franchiseId));
+        }
+    }
 }
