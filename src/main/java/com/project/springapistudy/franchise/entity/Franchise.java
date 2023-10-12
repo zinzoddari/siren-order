@@ -74,6 +74,10 @@ public class Franchise extends BaseEntity {
         }
     }
 
+    public void remove() {
+        this.useYn = Flag.N;
+    }
+
     public boolean isNotUse() {
         return !this.useYn.isY();
     }

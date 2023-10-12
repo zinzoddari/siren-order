@@ -7,6 +7,7 @@ import com.project.springapistudy.franchise.service.FranchiseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,8 +45,13 @@ class FranchiseController {
     }
 
     @PutMapping("/{franchiseId}")
-    public void modifyFranchiseId(@PathVariable @Min(1) long franchiseId
+    public void modifyFranchise(@PathVariable @Min(1) long franchiseId
             , @RequestBody @Valid FranchiseUpdateRequest request) {
         franchiseService.modifyFranchise(franchiseId, request);
+    }
+
+    @DeleteMapping("/{franchiseId}")
+    public void removeFranchise(@PathVariable @Min(1) long franchiseId) {
+        franchiseService.removeFranchise(franchiseId);
     }
 }
